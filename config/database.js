@@ -10,3 +10,5 @@ mongoose.connect('mongodb://localhost/test', {
         console.log('Connected to MongoDB');
     }
 });
+
+module.exports = mongoose;
