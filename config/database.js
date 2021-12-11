@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 let url;
 if(process.env.APP_ENV === "live"){
     url = 'mongodb://localhost/test';
-} else if(process.env.APP_ENV === "dev"){
+} else if (process.env.APP_ENV === "dev") {
+    // Suman why don't added password ??
     url = "mongodb+srv://suman12345:<password>@suacluster.fqsrk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 }
 
