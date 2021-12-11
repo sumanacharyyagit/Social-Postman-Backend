@@ -7,13 +7,13 @@ const sendEmail = (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.EMAIL,
-            pass: process.env.PASSWORD
+            user: process.env.GMAIL_EMAIL,
+            pass: process.env.GMAIL_PASSWORD
         }
     });
 
     const mailOptions = {
-        from: process.env.EMAIL,
+        from: process.env.GMAIL_EMAIL,
         to: req.body.email,
         subject: 'Reset Password',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
@@ -62,19 +62,14 @@ const login = (req, res) => {
         }
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) throw err;
+            console.log(isMatch);
             if (isMatch) {
                 const token = jwt.sign(user.toJSON(), process.env.SECRET_KEY, {
-                    expiresIn: 604800
+                    expiresIn: '1h'
                 });
+                req.user = user;
                 res.json({
-                    success: true,
-                    token: token,
-                    user: {
-                        id: user._id,
-                        name: user.name,
-                        username: user.username,
-                        email: user.email
-                    }
+                    token: token
                 });
             } else {
                 return res.json({
@@ -86,27 +81,44 @@ const login = (req, res) => {
     });
 }
 
-const logout = (req, res) => {
-    const token = req.body.token;
-    if (token) {
-        jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+
+var verifyToken = (req, res, next) => {
+    let token = req.headers['x-access-token'];
+    let promise = new Promise((resolve) => {
+        jwt.verify(token, process.env.SECRET_KEY, (err, result) => {
             if (err) {
-                return res.json({
-                    success: false,
-                    msg: 'Failed to logout'
-                });
-            } else {
-                return res.json({
-                    success: true,
-                    msg: 'Logged out'
-                });
+                resolve(false);
+            }
+            if (result) {
+                resolve(result);
             }
         });
+    });
+    promise.then((result) => {
+        if (result) {
+            next();
+        } else {
+            res.json({
+                msg: 'Invalid Token'
+            });
+        }
     }
+    );
 }
+
+
+// check user info
+const checkUser = (req, res) => {
+    const user = (req.user) ? req.user : null;
+    res.json({
+        user: user
+    });
+}
+
 
 module.exports = {
     register,
     login,
-    logout
+    verifyToken,
+    checkUser
 }
