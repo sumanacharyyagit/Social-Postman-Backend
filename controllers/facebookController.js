@@ -9,9 +9,9 @@ const post = async (req, res) => {
         const page = await browser.newPage();
         await page.goto('https://www.facebook.com/');
         await page.waitForSelector("[name='email']")
-        await page.type("[name='email']", "8001621693")
+        await page.type("[name='email']", "username")
         await page.keyboard.down('Tab')
-        await page.keyboard.type("hesoyam159")
+        await page.keyboard.type("password")
         const [button] = await page.$x("//button[contains(.,'Log In')]")
         if (button) {
             await button.click();

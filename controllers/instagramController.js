@@ -12,9 +12,9 @@ const post = async (req, res) => {
        const page = await browser.newPage();
         await page.goto('https://www.instagram.com/accounts/login/');
         await page.waitForSelector("[name='username']")
-        await page.type("[name='username']", "arnab00725@gmail.com")
+        await page.type("[name='username']", "username")
         await page.keyboard.down('Tab')
-        await page.keyboard.type("basketball@159")
+        await page.keyboard.type("password")
         const [button] = await page.$x("//button[contains(.,'Log In')]")
 
         if(button){
