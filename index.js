@@ -12,9 +12,9 @@ const morgan = require("morgan");
 require("./config/database");
 
 // Importing the routes
-// const userRoutes = require("./routes/userRoute");
+const userRoutes = require("./routes/userRoute");
 const authRoutes = require("./routes/auth");
-// const schedulePostRoutes = require("./routes/schedulePostRoute");
+const schedulePostRoutes = require("./routes/schedulePostRoute");
 
 const port = process.env.PORT || 3000; // export PORT=8080
 
@@ -26,9 +26,9 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-// app.use("/api/user", userRoutes);
+app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
-// app.use("/api/schedulePost", schedulePostRoutes);
+app.use("/api", schedulePostRoutes);
 
 
 

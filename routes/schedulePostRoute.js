@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const scheduleController = require('../controllers/scheduleController');
+const schedule = require('../controllers/scheduleController');
+const facebook = require('../controllers/facebookController');
+const instagram = require('../controllers/instagramController');
+const auth = require('../controllers/authController');
 
-router.post('/', scheduleController.schedulePost);
-router.get('/', scheduleController.scheduleGet);
+router.post('/', auth.verifyToken, schedule.schedulePost);
+// router.get('/', auth.verifyToken, schedule.scheduleGet);
+router.post('/facebook', auth.verifyToken, facebook.post);
+router.post('/instagram', auth.verifyToken, instagram.post);
 
-module.exports = route;
+module.exports = router;
