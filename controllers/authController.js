@@ -96,6 +96,7 @@ var verifyToken = (req, res, next) => {
     });
     promise.then((result) => {
         if (result) {
+            req.user = result;
             next();
         } else {
             res.json({
